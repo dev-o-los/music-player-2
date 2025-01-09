@@ -313,6 +313,16 @@ body:hover::-webkit-scrollbar-thumb {
   margin-block-end: 20px;
 }
 
+.credits {
+  text-align: center;
+  position: fixed;
+  width: 100%;
+  z-index: 999;
+  bottom: 0;
+  background-color: var(--surface-variant);
+  padding: 7px 0px;
+}
+
 .range {
   cursor: pointer;
 }
