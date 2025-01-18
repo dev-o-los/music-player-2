@@ -1,6 +1,4 @@
-'use strict';
-
-
+"use strict";
 
 /**
  * all music information
@@ -52,9 +50,16 @@ const musicData = [
     artist: "No Spirit",
     musicPath: "./assets/music/music-5.mp3",
   },
+  {
+    backgroundImage: "./assets/images/zayn.jpg",
+    posterUrl: "./assets/images/zayn.jpg",
+    title: "Better",
+    album: "ZAYN",
+    year: 2022,
+    artist: "ZAYN",
+    musicPath: "./assets/music/music-6.mp3",
+  },
 ];
-
-
 
 /**
  * add eventListnere on all elements that are passed
@@ -64,13 +69,11 @@ const addEventOnElements = function (elements, eventType, callback) {
   for (let i = 0, len = elements.length; i < len; i++) {
     elements[i].addEventListener(eventType, callback);
   }
-}
-
-
+};
 
 /**
  * PLAYLIST
- * 
+ *
  * add all music in playlist, from 'musicData'
  */
 
@@ -79,8 +82,12 @@ const playlist = document.querySelector("[data-music-list]");
 for (let i = 0, len = musicData.length; i < len; i++) {
   playlist.innerHTML += `
   <li>
-    <button class="music-item ${i === 0 ? "playing" : ""}" data-playlist-toggler data-playlist-item="${i}">
-      <img src="${musicData[i].posterUrl}" width="800" height="800" alt="${musicData[i].title} Album Poster"
+    <button class="music-item ${
+      i === 0 ? "playing" : ""
+    }" data-playlist-toggler data-playlist-item="${i}">
+      <img src="${musicData[i].posterUrl}" width="800" height="800" alt="${
+    musicData[i].title
+  } Album Poster"
         class="img-cover">
 
       <div class="item-icon">
@@ -91,11 +98,9 @@ for (let i = 0, len = musicData.length; i < len; i++) {
   `;
 }
 
-
-
 /**
  * PLAYLIST MODAL SIDEBAR TOGGLE
- * 
+ *
  * show 'playlist' modal sidebar when click on playlist button in top app bar
  * and hide when click on overlay or any playlist-item
  */
@@ -108,15 +113,13 @@ const togglePlaylist = function () {
   playlistSideModal.classList.toggle("active");
   overlay.classList.toggle("active");
   document.body.classList.toggle("modalActive");
-}
+};
 
 addEventOnElements(playlistTogglers, "click", togglePlaylist);
 
-
-
 /**
  * PLAYLIST ITEM
- * 
+ *
  * remove active state from last time played music
  * and add active state in clicked music
  */
@@ -129,7 +132,7 @@ let lastPlayedMusic = 0;
 const changePlaylistItem = function () {
   playlistItems[lastPlayedMusic].classList.remove("playing");
   playlistItems[currentMusic].classList.add("playing");
-}
+};
 
 addEventOnElements(playlistItems, "click", function () {
   lastPlayedMusic = currentMusic;
@@ -137,11 +140,9 @@ addEventOnElements(playlistItems, "click", function () {
   changePlaylistItem();
 });
 
-
-
 /**
  * PLAYER
- * 
+ *
  * change all visual information on player, based on current music
  */
 
@@ -155,7 +156,10 @@ const audioSource = new Audio(musicData[currentMusic].musicPath);
 
 const changePlayerInfo = function () {
   playerBanner.src = musicData[currentMusic].posterUrl;
-  playerBanner.setAttribute("alt", `${musicData[currentMusic].title} Album Poster`);
+  playerBanner.setAttribute(
+    "alt",
+    `${musicData[currentMusic].title} Album Poster`
+  );
   document.body.style.backgroundImage = `url(${musicData[currentMusic].backgroundImage})`;
   playerTitle.textContent = musicData[currentMusic].title;
   playerAlbum.textContent = musicData[currentMusic].album;
@@ -166,7 +170,7 @@ const changePlayerInfo = function () {
 
   audioSource.addEventListener("loadeddata", updateDuration);
   playMusic();
-}
+};
 
 addEventOnElements(playlistItems, "click", changePlayerInfo);
 
@@ -177,23 +181,21 @@ const playerSeekRange = document.querySelector("[data-seek]");
 /** pass seconds and get timcode formate */
 const getTimecode = function (duration) {
   const minutes = Math.floor(duration / 60);
-  const seconds = Math.ceil(duration - (minutes * 60));
+  const seconds = Math.ceil(duration - minutes * 60);
   const timecode = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   return timecode;
-}
+};
 
 const updateDuration = function () {
   playerSeekRange.max = Math.ceil(audioSource.duration);
   playerDuration.textContent = getTimecode(Number(playerSeekRange.max));
-}
+};
 
 audioSource.addEventListener("loadeddata", updateDuration);
 
-
-
 /**
  * PLAY MUSIC
- * 
+ *
  * play and pause music when click on play button
  */
 
@@ -211,10 +213,9 @@ const playMusic = function () {
     playBtn.classList.remove("active");
     clearInterval(playInterval);
   }
-}
+};
 
 playBtn.addEventListener("click", playMusic);
-
 
 /** update running time while playing music */
 
@@ -226,13 +227,11 @@ const updateRunningTime = function () {
 
   updateRangeFill();
   isMusicEnd();
-}
-
-
+};
 
 /**
  * RANGE FILL WIDTH
- * 
+ *
  * change 'rangeFill' width, while changing range value
  */
 
@@ -244,26 +243,22 @@ const updateRangeFill = function () {
 
   const rangeValue = (element.value / element.max) * 100;
   element.nextElementSibling.style.width = `${rangeValue}%`;
-}
+};
 
 addEventOnElements(ranges, "input", updateRangeFill);
 
-
-
 /**
  * SEEK MUSIC
- * 
+ *
  * seek music while changing player seek range
  */
 
 const seek = function () {
   audioSource.currentTime = playerSeekRange.value;
   playerRunningTime.textContent = getTimecode(playerSeekRange.value);
-}
+};
 
 playerSeekRange.addEventListener("input", seek);
-
-
 
 /**
  * END MUSIC
@@ -277,9 +272,7 @@ const isMusicEnd = function () {
     playerRunningTime.textContent = getTimecode(audioSource.currentTime);
     updateRangeFill();
   }
-}
-
-
+};
 
 /**
  * SKIP TO NEXT MUSIC
@@ -293,16 +286,14 @@ const skipNext = function () {
   if (isShuffled) {
     shuffleMusic();
   } else {
-    currentMusic >= musicData.length - 1 ? currentMusic = 0 : currentMusic++;
+    currentMusic >= musicData.length - 1 ? (currentMusic = 0) : currentMusic++;
   }
 
   changePlayerInfo();
   changePlaylistItem();
-}
+};
 
 playerSkipNextBtn.addEventListener("click", skipNext);
-
-
 
 /**
  * SKIP TO PREVIOUS MUSIC
@@ -316,16 +307,14 @@ const skipPrev = function () {
   if (isShuffled) {
     shuffleMusic();
   } else {
-    currentMusic <= 0 ? currentMusic = musicData.length - 1 : currentMusic--;
+    currentMusic <= 0 ? (currentMusic = musicData.length - 1) : currentMusic--;
   }
 
   changePlayerInfo();
   changePlaylistItem();
-}
+};
 
 playerSkipPrevBtn.addEventListener("click", skipPrev);
-
-
 
 /**
  * SHUFFLE MUSIC
@@ -334,7 +323,7 @@ playerSkipPrevBtn.addEventListener("click", skipPrev);
 /** get random number for shuffle */
 const getRandomMusic = () => Math.floor(Math.random() * musicData.length);
 
-const shuffleMusic = () => currentMusic = getRandomMusic();
+const shuffleMusic = () => (currentMusic = getRandomMusic());
 
 const playerShuffleBtn = document.querySelector("[data-shuffle]");
 let isShuffled = false;
@@ -343,11 +332,9 @@ const shuffle = function () {
   playerShuffleBtn.classList.toggle("active");
 
   isShuffled = isShuffled ? false : true;
-}
+};
 
 playerShuffleBtn.addEventListener("click", shuffle);
-
-
 
 /**
  * REPEAT MUSIC
@@ -363,15 +350,13 @@ const repeat = function () {
     audioSource.loop = false;
     this.classList.remove("active");
   }
-}
+};
 
 playerRepeatBtn.addEventListener("click", repeat);
 
-
-
 /**
  * MUSIC VOLUME
- * 
+ *
  * increase or decrease music volume when change the volume range
  */
 
@@ -389,10 +374,9 @@ const changeVolume = function () {
   } else {
     playerVolumeBtn.children[0].textContent = "volume_up";
   }
-}
+};
 
 playerVolumeRange.addEventListener("input", changeVolume);
-
 
 /**
  * MUTE MUSIC
@@ -405,6 +389,6 @@ const muteVolume = function () {
   } else {
     changeVolume();
   }
-}
+};
 
 playerVolumeBtn.addEventListener("click", muteVolume);
