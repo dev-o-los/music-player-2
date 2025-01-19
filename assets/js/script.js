@@ -352,26 +352,6 @@ const repeat = function () {
   }
 };
 
-//playing selected music
-
-function getQueryParam(param) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(param);
-}
-
-function selectMusic() {
-  const val = getQueryParam("value");
-  currentMusic = +val;
-  changePlayerInfo();
-  audioSource.play();
-  playBtn.classList.add("active");
-  playInterval = setInterval(updateRunningTime, 500);
-}
-
-selectMusic();
-
-playerRepeatBtn.addEventListener("click", repeat);
-
 /**
  * MUSIC VOLUME
  *
